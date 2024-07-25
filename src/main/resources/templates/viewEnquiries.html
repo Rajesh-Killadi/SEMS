@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<title>Software Training Institute - Dashboard</title>
+	<style>
+		/* Custom styles */
+		body {
+			background-color: #f0f0f0;
+			/* Light gray background */
+			color: #333;
+			/* Dark text color */
+			font-family: 'Arial', sans-serif;
+			/* Font family */
+			margin: 0;
+			padding: 0;
+		}
+
+		.navbar-card {
+			background-color: #292b2c;
+			/* Dark background color for navbar */
+			border: 1px solid #292b2c;
+			border-radius: 0;
+			/* No border-radius */
+			padding: 10px;
+			margin-bottom: 20px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			/* Box shadow for depth */
+		}
+
+		.navbar-brand {
+			color: #ffc107;
+			/* Gold color for institute name */
+			font-weight: bold;
+			font-size: 24px;
+		}
+
+		.navbar-toggler-icon {
+			background-color: #fff;
+			/* White color for toggler icon */
+		}
+
+		.navbar-nav .nav-link {
+			color: #fff;
+			/* White color for navbar links */
+			font-weight: bold;
+			font-size: 16px;
+		}
+
+		.navbar-nav .nav-link:hover {
+			color: #e9ecef;
+			/* Light gray color on hover */
+		}
+
+		.navbar-nav .logout-link {
+			color: #dc3545;
+			/* Red color for logout link */
+		}
+
+		.central-card {
+			max-width: 800px;
+			margin: 0 auto;
+			margin-top: 50px;
+		}
+
+		.card {
+			background-color: #fff;
+			/* White background for card */
+			border: 1px solid #ddd;
+			/* Light gray border */
+			border-radius: 10px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			/* Box shadow for depth */
+		}
+
+		.dashboard-heading {
+			color: #007bff;
+			/* Blue color for heading */
+			font-size: 20px;
+			font-weight: bold;
+			margin-bottom: 15px;
+		}
+
+		.dashboard-field {
+			font-size: 16px;
+			margin-bottom: 10px;
+		}
+
+		.dropdown-container {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 15px;
+		}
+
+		.dropdown {
+			flex: 0 0 30%;
+		}
+
+		.table-container {
+			overflow-x: auto;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 15px;
+		}
+
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: left;
+		}
+
+		th {
+			background-color: #007bff;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Navigation Bar -->
+	<nav class="navbar navbar-expand-lg navbar-light navbar-card">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Global Technologies</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link"
+							th:href="@{/dashboard(counsellorId=${counsellorId})}">Home</a></li>
+					<li class="nav-item"><a class="nav-link"
+							th:href="@{/enquiryRegistration(counsellorId=${counsellorId})}">Add Enquiry</a></li>
+					<li class="nav-item"><a class="nav-link"
+							th:href="@{/viewEnquiries(counsellorId=${counsellorId})}">View Enquiries</a></li>
+					<li class="nav-item"><a class="nav-link logout-link" href="/">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Central Card with Dashboard Information -->
+	<div class="container central-card">
+		<div class="card">
+			<div class="card-body">
+				<!-- Dashboard Information Section -->
+				<div class="dashboard-heading">View Student Enquiries</div>
+				<div class="dropdown-container">
+					<div class="dropdown">
+						<label for="classMode" class="form-label">Class Mode</label>
+						<select class="form-select" id="dropdown1" name="classMode" required
+							onchange="dropDownChanged()">
+							<option value="" ,'disabled', 'selected'>--select--</option>
+							<option value="online">Online</option>
+							<option value="offline">Offline</option>
+						</select>
+					</div>
+					<div class="dropdown">
+						<label for="course" class="form-label">Course</label>
+						<select class="form-select" id="dropdown2" name="course" required onchange="dropDownChanged()">
+							<option value="" ,'disabled', 'selected'>--select--</option>
+							<option value="java fullstack">Java Fullstack</option>
+							<option value="python fullstack">Python Fullstack</option>
+							<option value="devops">Devops</option>
+							<option value="testing">Testing</option>
+							<option value="aws">Aws</option>
+						</select>
+					</div>
+					<div class="dropdown">
+						<label for="enquiryStatus" class="form-label">Enquiry Status</label>
+						<select class="form-select" id="dropdown3" name="enquiryStatus" required
+							onchange="dropDownChanged()">
+							<option value="" ,'disabled', 'selected'>--select--</option>
+							<option value="new">New</option>
+							<option value="enrolled">Enrolled</option>
+							<option value="lost">Lost</option>
+						</select>
+					</div>
+					 <span id="hiddenField" style="display: none;" th:text="${counsellorId}"></span>
+				</div>
+				<script>
+
+					function dropDownChanged() {
+						let dropdown1 = document.getElementById("dropdown1").value;
+						let dropdown2 = document.getElementById("dropdown2").value;
+						let dropdown3 = document.getElementById("dropdown3").value;
+						var counsellorId = document.getElementById("hiddenField").textContent;
+
+						console.log(dropdown1 + " " + dropdown2 + " " + dropdown3 +" "+counsellorId);
+						console.log(counsellorId);
+
+						var xhr = new XMLHttpRequest();
+						var url = "/filterStudents"; // Replace with your API endpoint
+
+						xhr.open("POST", url, true);
+						xhr.setRequestHeader("Content-Type", "application/json");
+
+						// Your data to be sent in the request body
+						var data = {
+							"classMode": dropdown1,
+							"course": dropdown2,
+							"enquiryStatus": dropdown3,
+							"counsellorId":counsellorId
+						};
+
+						// Convert data to JSON string
+						var jsonData = JSON.stringify(data);
+
+						xhr.send(jsonData);
+
+						xhr.onload = function () {
+							if (xhr.status == 200) {
+								var responseData = xhr.responseText;
+								var jsonObject = JSON.parse(responseData);
+								console.log(jsonObject);
+								displayTable(jsonObject);
+
+							} else {
+								console.error("Error Occurred");
+							}
+
+
+						};
+
+
+					};
+					function displayTable(data) {
+						var tableBody = '';
+
+						data.forEach(function (item, index) {
+							tableBody += '<tr>';
+							tableBody += '<td>' + (index + 1) + '</td>';
+							tableBody += '<td>' + item.studentName + '</td>';
+							tableBody += '<td>' + item.course + '</td>';
+							tableBody += '<td>' + item.studentNo + '</td>';
+							tableBody += '<td>' + item.enquiryDate + '</td>';
+							tableBody += '<td>' + item.enquiryStatus + '</td>';
+							tableBody += '<td>' + item.classMode + '</td>';
+							// Add more columns as needed
+							tableBody += '</tr>';
+						});
+
+						var tbody = document.querySelector('tbody');
+						tbody.innerHTML = tableBody;
+					}
+
+
+				</script>
+
+
+
+
+
+				<!-- Table Section -->
+				<div class="table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Course</th>
+								<th>Number</th>
+								<th>Enquiry Date</th>
+								<th>Status</th>
+								<th>Mode</th>
+							</tr>
+						</thead>
+						<tbody class="tbody">
+							<!-- Add rows dynamically based on data -->
+							<tr th:each="list,iterStat : ${studentsList}">
+								<td th:text="${iterStat.index + 1}"></td>
+								<td th:text="${list.studentName}">
+								<td th:text="${list.course}"></td>
+								<td th:text="${list.contactNo}"></td>
+								<td th:text="${list.enquiryDate}"></td>
+								<td th:text="${list.enquiryStatus}"></td>
+								<td th:text="${list.classMode}"></td>
+
+
+							</tr>
+							<!-- Add more rows as needed -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JS and Popper.js -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>
