@@ -76,7 +76,7 @@ public class ServiceImplementation implements CounsellorService {
 		
 		Counsellors findByEmail = counsellorDao.findByEmail(email);
 
-		if (findByEmail.getEmail() != null) {
+		if (findByEmail != null) {
 			
 			String msg = "Your password is :"+findByEmail.getPassword();
 			SimpleMailMessage mail = new SimpleMailMessage();
