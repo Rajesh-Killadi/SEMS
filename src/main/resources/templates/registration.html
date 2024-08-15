@@ -89,6 +89,10 @@
         .blockquote-footer {
             color: #6c757d; /* Gray color for blockquote footer */
         }
+        .text {
+    color:#0000ff;
+}
+
     </style>
 </head>
 <body>
@@ -138,7 +142,7 @@
                     <button type="submit" class="btn btn-primary">Sign Up</button>
                     <a href="/" class="float-end">Login Here</a>
                 </div>
-               <p th:text="${registrationSuccess}" class="text-succces">Registration Success</p>
+               <p th:text="${registrationSuccess}" class="text">Registration Success</p>
                <p th:text="${registrationFailed}" class="text-danger">Email is Already Registred</p>
                
             </form>
